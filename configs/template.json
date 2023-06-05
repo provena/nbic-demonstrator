@@ -1,0 +1,15 @@
+{
+  "inputs": {
+    "hourly_temperature": "TODO",
+    "relative_humidity": "TODO",
+    "wind_speed": "TODO",
+    "daily_mc_adf": "TODO"
+  },
+  "associations": {
+    "person": "TODO",
+    "organisation": "TODO"
+  },
+  "workflow_configuration": {
+    "workflow_template": "TODO"
+  }
+}

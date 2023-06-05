@@ -1,0 +1,4 @@
+ipykernel
+pydantic
+mdsisclienttools
+requests
