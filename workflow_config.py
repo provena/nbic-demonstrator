@@ -169,6 +169,7 @@ class HourlyFFDIWorkflowConfig(BaseModel):
             print("Failed workflow configuration validation.")
             return False
 
+        print("Validation successful...")
         return True
 
 

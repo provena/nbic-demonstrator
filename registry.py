@@ -9,13 +9,14 @@ def check_response(response: requests.Response, status_check: bool) -> None:
         raise Exception(
             f"Non 200 status code in response: {status_code}. Response: {response.text}.")
     if status_check:
-        status_object = response.json().status
-        if not status_object.success:
+        status_object = response.json()["status"]
+        if not status_object["success"]:
             raise Exception(
-                f"200OK response but status success was false. Message: {status_object.details}")
+                f"200OK response but status success was false. Message: {status_object['details']}")
 
 
 def generic_fetch(endpoint: str, id: str, auth: BearerAuth) -> Dict[str, Any]:
+    print(f"Fetching from registry, id: {id}...")
     params = {"id": id}
 
     # Make request and validate response
@@ -23,7 +24,7 @@ def generic_fetch(endpoint: str, id: str, auth: BearerAuth) -> Dict[str, Any]:
     check_response(response=response, status_check=True)
 
     # Return the item from the response
-    return response.json().item
+    return response.json()["item"]
 
 
 def fetch_dataset(registry_endpoint: str, id: str, auth: BearerAuth) -> Dict[str, Any]:
