@@ -155,8 +155,17 @@ class ModelAssociations(BaseModel):
 
 
 class ModelConfigurationEntities(BaseModel):
+    # Adjustable
+
     # The registered model run workflow template
     workflow_template: str
+
+    # Constant (read only)
+    HOURLY_TEMPERATURE_DEFERRED_RESOURCE_KEY: str = "hourly_temperature_zarr"
+    RELATIVE_HUMIDITY_DEFERRED_RESOURCE_KEY: str = "relative_humidity_zarr"
+    WIND_SPEED_DEFERRED_RESOURCE_KEY: str = "wind_speed_zarr"
+    MC_ADF_DEFERRED_RESOURCE_KEY: str = "mcadf_zarr"
+    HOURLY_FFDI_DEFERRED_RESOURCE_KEY: str = "hourly_ffdi_zarr"
 
     def validate_entities(self, registry_endpoint: str, auth: GetAuthFunction) -> bool:
         print("Validating registered associations...")
