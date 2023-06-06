@@ -1,9 +1,17 @@
 {
   "inputs": {
     "hourly_temperature": "TODO",
+    "hourly_temperature_template": "TODO",
     "relative_humidity": "TODO",
+    "relative_humidity_template": "TODO",
     "wind_speed": "TODO",
-    "daily_mc_adf": "TODO"
+    "wind_speed_template": "TODO",
+    "daily_mc_adf": "TODO",
+    "daily_mc_adf_template": "TODO"
+  },
+  "outputs": {
+    "hourly_ffdi": "TODO",
+    "hourly_ffdi_template": "TODO"
   },
   "associations": {
     "person": "TODO",

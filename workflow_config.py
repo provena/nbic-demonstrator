@@ -8,44 +8,106 @@ from typing import Callable
 GetAuthFunction = Callable[[], BearerAuth]
 
 
-class ModelInputs(BaseModel):
+class ModelOutputs(BaseModel):
     # This is a key part of the model run configuration - it specifies a set of
     # expected dataset references - the value here should be the handle
     # identifier of the Provena registered Dataset
 
-    # The hourly temperature dataset - i.e.
-    # nbic.catalog_s3_stage1.weather.projected.to_path('AU_hourly_temperature_C.zarr')
-    hourly_temperature: str
-
-    # The relative humidity dataset - i.e.
-    # nbic.catalog_s3_stage1.weather.projected.to_path('AU_hourly_relative_humidity_percent.zarr')
-    relative_humidity: str
-
-    # The wind speed dataset - i.e.
-    # nbic.catalog_s3_stage1.weather.baseline.to_path('AU_hourly_wind_speed_mps_updated_220224_corrected.zarr')
-    wind_speed: str
-
-    # The 'daily McADF' - not sure what this is - i.e.
-    # nbic.catalog_s3_stage1.weather.projected.to_path('AU_daily_McADF_improved_uncapped.zarr')
-    daily_mc_adf: str
+    hourly_ffdi: str
+    hourly_ffdi_template: str
 
     def validate_entities(self, registry_endpoint: str, auth: GetAuthFunction) -> bool:
-        print("Validating registered input datasets...")
+        print("Validating registered output datasets...")
 
-        ids = [
-            self.hourly_temperature,
-            self.relative_humidity,
-            self.wind_speed,
-            self.daily_mc_adf
+        datasets = [
+            self.hourly_ffdi
         ]
 
-        for id in ids:
+        templates = [
+            self.hourly_ffdi_template
+        ]
+
+        for id in datasets:
             try:
                 registry.fetch_dataset(
                     registry_endpoint=registry_endpoint, id=id, auth=auth())
             except Exception as e:
                 print(
                     f"Encountered exception while validating Dataset: {id=}. Exception: {e}.")
+                return False
+
+        for id in templates:
+            try:
+                registry.fetch_dataset_template(
+                    registry_endpoint=registry_endpoint, id=id, auth=auth())
+            except Exception as e:
+                print(
+                    f"Encountered exception while validating Dataset Template: {id=}. Exception: {e}.")
+                return False
+
+        return True
+
+
+class ModelInputs(BaseModel):
+    # This is a key part of the model run configuration - it specifies a set of
+    # expected dataset references - the value here should be the handle
+    # identifier of the Provena registered Dataset
+
+    # each part includes the template ID and the dataset ID which matches it
+
+    # The hourly temperature dataset - i.e.
+    # nbic.catalog_s3_stage1.weather.projected.to_path('AU_hourly_temperature_C.zarr')
+    hourly_temperature: str
+    hourly_temperature_template: str
+
+    # The relative humidity dataset - i.e.
+    # nbic.catalog_s3_stage1.weather.projected.to_path('AU_hourly_relative_humidity_percent.zarr')
+    relative_humidity: str
+    relative_humidity_template: str
+
+    # The wind speed dataset - i.e.
+    # nbic.catalog_s3_stage1.weather.baseline.to_path('AU_hourly_wind_speed_mps_updated_220224_corrected.zarr')
+    wind_speed: str
+    wind_speed_template: str
+
+    # The 'daily McADF' - not sure what this is - i.e.
+    # nbic.catalog_s3_stage1.weather.projected.to_path('AU_daily_McADF_improved_uncapped.zarr')
+    daily_mc_adf: str
+    daily_mc_adf_template: str
+
+    def validate_entities(self, registry_endpoint: str, auth: GetAuthFunction) -> bool:
+        print("Validating registered input datasets...")
+
+        datasets = [
+            self.hourly_temperature,
+            self.relative_humidity,
+            self.wind_speed,
+            self.daily_mc_adf
+        ]
+
+        templates = [
+            self.hourly_temperature_template,
+            self.relative_humidity_template,
+            self.wind_speed_template,
+            self.daily_mc_adf_template
+        ]
+
+        for id in datasets:
+            try:
+                registry.fetch_dataset(
+                    registry_endpoint=registry_endpoint, id=id, auth=auth())
+            except Exception as e:
+                print(
+                    f"Encountered exception while validating Dataset: {id=}. Exception: {e}.")
+                return False
+
+        for id in templates:
+            try:
+                registry.fetch_dataset_template(
+                    registry_endpoint=registry_endpoint, id=id, auth=auth())
+            except Exception as e:
+                print(
+                    f"Encountered exception while validating Dataset Template: {id=}. Exception: {e}.")
                 return False
 
         return True
@@ -117,6 +179,7 @@ class ModelConfigurationEntities(BaseModel):
 
 class HourlyFFDIWorkflowConfig(BaseModel):
     inputs: ModelInputs
+    outputs: ModelOutputs
     associations: ModelAssociations
     workflow_configuration: ModelConfigurationEntities
 
@@ -130,7 +193,15 @@ class HourlyFFDIWorkflowConfig(BaseModel):
                 hourly_temperature="TODO",
                 relative_humidity="TODO",
                 daily_mc_adf="TODO",
-                wind_speed="TODO"
+                wind_speed="TODO",
+                hourly_temperature_template="TODO",
+                relative_humidity_template="TODO",
+                daily_mc_adf_template="TODO",
+                wind_speed_template="TODO"
+            ),
+            outputs=ModelOutputs(
+                hourly_ffdi="TODO",
+                hourly_ffdi_template="TODO"
             ),
             associations=ModelAssociations(
                 person="TODO",
@@ -153,6 +224,13 @@ class HourlyFFDIWorkflowConfig(BaseModel):
 
         if not inputs:
             print("Failed inputs validation.")
+            return False
+
+        outputs = self.outputs.validate_entities(
+            registry_endpoint=registry_endpoint, auth=auth)
+
+        if not outputs:
+            print("Failed outputs validation.")
             return False
 
         associations = self.associations.validate_entities(

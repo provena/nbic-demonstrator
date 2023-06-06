@@ -49,3 +49,9 @@ def fetch_model_run_workflow_template(registry_endpoint: str, id: str, auth: Bea
     postfix = "/registry/entity/model_run_workflow/fetch"
     endpoint = registry_endpoint + postfix
     return generic_fetch(endpoint=endpoint, id=id, auth=auth)
+
+
+def fetch_dataset_template(registry_endpoint: str, id: str, auth: BearerAuth) -> Dict[str, Any]:
+    postfix = "/registry/entity/dataset_template/fetch"
+    endpoint = registry_endpoint + postfix
+    return generic_fetch(endpoint=endpoint, id=id, auth=auth)

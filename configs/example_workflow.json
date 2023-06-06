@@ -1,9 +1,17 @@
 {
   "inputs": {
     "hourly_temperature": "10378.1/1709248",
+    "hourly_temperature_template": "10378.1/1709254",
     "relative_humidity": "10378.1/1709249",
+    "relative_humidity_template": "10378.1/1709255",
     "wind_speed": "10378.1/1709251",
-    "daily_mc_adf": "10378.1/1709252"
+    "wind_speed_template": "10378.1/1709256",
+    "daily_mc_adf": "10378.1/1709252",
+    "daily_mc_adf_template": "10378.1/1709257"
+  },
+  "outputs": {
+    "hourly_ffdi": "10378.1/1709260",
+    "hourly_ffdi_template": "10378.1/1709258"
   },
   "associations": {
     "person": "10378.1/1709236",
