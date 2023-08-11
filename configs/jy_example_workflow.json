@@ -1,0 +1,17 @@
+{
+  "inputs": {
+    "hourly_temperature": "10378.1/1730504",
+    "hourly_temperature_template": "10378.1/1730516"    
+  },
+  "outputs": {
+    "hourly_jyi": "10378.1/1730515",
+    "hourly_jyi_template": "10378.1/1730517"
+  },
+  "associations": {
+    "person": "10378.1/1723017",
+    "organisation": "10378.1/1727883"
+  },
+  "workflow_configuration": {
+    "workflow_template": "10378.1/1730519"
+  }
+}
